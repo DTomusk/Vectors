@@ -1,5 +1,5 @@
 import unittest 
-from vector import Vector
+from vector import Vector, Line
 
 class TestVectorMethods(unittest.TestCase):
 	def test_addition(self):
@@ -21,6 +21,13 @@ class TestVectorMethods(unittest.TestCase):
 		vec3 = Vector([3,3,-2])
 		self.assertEqual(vec1 ** vec1, Vector([0,0,0]))
 		self.assertEqual(vec2 ** vec3, Vector([-1,7,9]))
+
+	def test_line_intersect(self):
+		line1 = Line(Vector([0,0]), Vector([1,1]))
+		line2 = Line(Vector([0,5]), Vector([1,2]))
+		line3 = Line(Vector([0,-2]), Vector([4,1]))
+		self.assertEqual(line1.intersect(line2), Vector([-5,-5]))
+		self.assertEqual(line2.intersect(line3), Vector([-4,-3]))
 
 	#def test_scalar_multiplication(self):
 

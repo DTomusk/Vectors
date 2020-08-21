@@ -58,6 +58,15 @@ class Vector():
 		string += str(self.data[len(self)-1]) + ")"
 		return string
 
+	def __eq__(self, other):
+		if len(self) != len(other):
+			return False
+		else:
+			for i in range(len(self)):
+				if self.data[i] != other.data[i]:
+					return False
+			return True
+
 	def mod(self):
 		result = 0
 		for i in range(len(self)):

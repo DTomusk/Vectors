@@ -154,6 +154,9 @@ class Circle(Ellipse):
 		self.center = center
 		self.r = radius 
 
+	def coordinate(self, t):
+		return Vector([self.r * math.cos(t) + self.center.data[0], self.r * math.sin(t) + self.center.data[1]])
+
 	def lineIntersection(self, line):
 		radial_line = Line(self.center, Vector.normal(line.slope))
 		line_intersect = radial_line.intersect(line)

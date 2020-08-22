@@ -17,6 +17,13 @@ class Vector():
 				result.append(self.data[i] * other.data[i])
 			return sum(result)
 
+	# scalar division
+	def __truediv__(self, other):
+		result = []
+		for i in range(len(self)):
+			result.append(self.data[i] / other)
+		return Vector(result)
+
 	# cross product (might have to chose different operator)
 	def __pow__(self, other):
 		if len(self) != len(other):
@@ -58,12 +65,13 @@ class Vector():
 		string += str(self.data[len(self)-1]) + ")"
 		return string
 
+	# should round to a suitable degree just to avoid annoying problems 
 	def __eq__(self, other):
 		if len(self) != len(other):
 			return False
 		else:
 			for i in range(len(self)):
-				if self.data[i] != other.data[i]:
+				if round(self.data[i], 6) != round(other.data[i], 6):
 					return False
 			return True
 
@@ -79,7 +87,12 @@ class Vector():
 		else:
 			return math.acos((self * other) / (self.mod() * other.mod()))
 
-	# only for two dimensional 
+	# Gives the unit vector with the same slope as the given vector 
+	@staticmethod
+	def unit(vector):
+		return vector / vector.mod()
+
+	# only for two dimensional, gives a vector with slope normal to the given vector  
 	@staticmethod
 	def normal(gradient_vector):
 		return Vector([-1 * gradient_vector.data[1], gradient_vector.data[0]])
@@ -89,8 +102,8 @@ class Line():
 	def __init__(self, a, l):
 		# a vector point that lies on the line 
 		self.start = a
-		# the slope of the line (also a vector)
-		self.slope = l
+		# the slope of the line (also a vector), slope has size one to make some other things easier 
+		self.slope = Vector.unit(l)
 
 	# finds the point disp away from a that lies on the line (disp can be positive or negative)
 	def coordinate(self, disp):
@@ -98,10 +111,6 @@ class Line():
 
 	# find the intersection of two lines 
 	def intersect(self, other):
-		print("First start: " + str(self.start))
-		print("Second start: " + str(other.start))
-		print("First slope: " + str(self.slope))
-		print("Second slope: " + str(other.slope))
 		if (self.slope == other.slope) | (self.slope == -1 * other.slope):
 			# not sure this should be an exception, do we expect inputs to intersect? 
 			raise Exception("Given lines don't intersect")
@@ -117,7 +126,6 @@ class Line():
 			mx = other.slope.data[0]
 			my = other.slope.data[1]
 			param = (by - ay + (ly / lx) * (ax - bx)) / ((ly * mx / lx) - my) 
-			print("Result: " + str(other.start + (param * other.slope)))
 			return other.start + (param * other.slope)
 
 # not sure if I should include a vector to the center yet, or assume it's centered on the origin 
@@ -154,7 +162,12 @@ class Circle(Ellipse):
 			# exception?
 			raise Exception("No intersections")
 		elif shortest_distance_to_line == self.r:
-			return line_intersect
+			return [line_intersect]
+		# if the center of the circle lies on the line 
+		elif shortest_distance_to_line == 0:
+			intersection1 = self.center + self.r * (line.slope)
+			intersection2 = self.center - self.r * (line.slope)
+			return [intersection1, intersection2]
 		else: 
 			# get two intersects 
 			pass

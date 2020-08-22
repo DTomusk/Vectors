@@ -116,7 +116,7 @@ class Line():
 			ly = self.slope.data[1]
 			mx = other.slope.data[0]
 			my = other.slope.data[1]
-			param = (by - ay + (ly / lx) * (ax - bx)) / (mx - my) 
+			param = (by - ay + (ly / lx) * (ax - bx)) / ((ly * mx / lx) - my) 
 			print("Result: " + str(other.start + (param * other.slope)))
 			return other.start + (param * other.slope)
 

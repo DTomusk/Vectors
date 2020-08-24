@@ -97,6 +97,11 @@ class Vector():
 	def normal(gradient_vector):
 		return Vector([-1 * gradient_vector.data[1], gradient_vector.data[0]])
 
+	# returns a gradient vector given two cartesian points 
+	@staticmethod
+	def gradient(first, second):
+		return Vector.unit(Vector([second[0]-first[0], second[1]-first[1]]))
+
 # could potentially be in any dimension (over 2), but we'll start with two 
 class Line():
 	def __init__(self, a, l):
@@ -106,11 +111,11 @@ class Line():
 		self.slope = Vector.unit(l)
 
 	# finds the point disp away from a that lies on the line (disp can be positive or negative)
-	def coordinate(self, disp):
+	def coordinate(self, disp: float):
 		return self.a + (disp * self.l)
 
 	# find the intersection of two lines 
-	def intersect(self, other):
+	def intersect(self, other: Line):
 		if (self.slope == other.slope) | (self.slope == -1 * other.slope):
 			# not sure this should be an exception, do we expect inputs to intersect? 
 			raise Exception("Given lines don't intersect")
@@ -174,3 +179,9 @@ class Circle(Ellipse):
 		else: 
 			# get two intersects 
 			pass
+
+class Arc(Circle):
+	def __init__(self, center, radius, angle1, angle2):
+		super().__init__(center, radius)
+		self.angle1 = angle1
+		self.angle2 = angle2
